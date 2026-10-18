@@ -12,6 +12,7 @@ data class LocalPlaylist(
     val id: String,
     val title: String,
     val songs: List<Song>,
+    val coverArtUrl: String? = null,
 ) {
     val browseId: String get() = "local:playlist:$id"
 }
@@ -40,6 +41,7 @@ object LocalPlaylistStore {
                 val obj = jsonArray.getJSONObject(i)
                 val id = obj.getString("id")
                 val title = obj.getString("title")
+                val coverArtUrl = obj.optString("coverArtUrl", null).takeIf { !it.isNullOrBlank() && it != "null" }
                 val songsArray = obj.getJSONArray("songs")
                 val songs = mutableListOf<Song>()
                 for (j in 0 until songsArray.length()) {
@@ -57,7 +59,7 @@ object LocalPlaylistStore {
                     )
                     songs.add(song)
                 }
-                list.add(LocalPlaylist(id, title, songs))
+                list.add(LocalPlaylist(id, title, songs, coverArtUrl))
             }
             _playlists.value = list
         }
@@ -94,6 +96,17 @@ object LocalPlaylistStore {
         return _playlists.value.firstOrNull { it.id == cleanId || it.id == id || it.browseId == id }
     }
 
+    fun setPlaylistCoverArt(id: String, coverArtUrl: String?) {
+        val cleanId = id.removePrefix("local:playlist:").removePrefix("VL")
+        val updated = _playlists.value.map {
+            if (it.id == cleanId || it.id == id || it.browseId == id) {
+                it.copy(coverArtUrl = coverArtUrl)
+            } else it
+        }
+        _playlists.value = updated
+        persist(updated)
+    }
+
     private fun persist(list: List<LocalPlaylist>) {
         if (!this::prefs.isInitialized) return
         runCatching {
@@ -102,6 +115,7 @@ object LocalPlaylistStore {
                 val pObj = JSONObject()
                 pObj.put("id", playlist.id)
                 pObj.put("title", playlist.title)
+                playlist.coverArtUrl?.let { pObj.put("coverArtUrl", it) }
                 val songsArray = JSONArray()
                 for (song in playlist.songs) {
                     val sObj = JSONObject()
