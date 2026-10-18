@@ -8,6 +8,16 @@ import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioFormat
+import android.media.audiofx.AudioEffect
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -37,7 +47,6 @@ import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.Animation
 import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.BlurOff
 import androidx.compose.material.icons.rounded.BlurOn
@@ -79,6 +88,13 @@ import androidx.compose.material.icons.rounded.WebAssetOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Waves
 import androidx.compose.material.icons.rounded.Wifi
+import androidx.compose.material.icons.rounded.Bluetooth
+import androidx.compose.material.icons.rounded.BluetoothConnected
+import androidx.compose.material.icons.rounded.BluetoothDisabled
+import androidx.compose.material.icons.rounded.Sort
+import androidx.compose.material.icons.rounded.DragHandle
+import androidx.compose.material.icons.rounded.Image as ImageIcon
+import androidx.compose.material.icons.rounded.Palette
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
@@ -163,6 +179,7 @@ import com.music.breezze.ui.player.fullBleedArtworkAvailable
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import java.util.Locale
+import java.util.Set
 
 /**
  * Grouped settings, in the shape phones have taught people to expect: inset
@@ -191,6 +208,10 @@ fun SettingsScreen(
     onSpotifyCanvasAuth: () -> Unit,
     onAppLanguage: () -> Unit,
     onEditSignatureApi: () -> Unit,
+    onBluetoothSettings: () -> Unit,
+    onPairedDevices: () -> Unit,
+    onAiPlaylistCreator: () -> Unit,
+    onAiPlaylistHistory: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -251,6 +272,13 @@ fun SettingsScreen(
     val localMusicFolderUri by AppSettings.localMusicFolderUri.collectAsStateWithLifecycle()
     val highPerformanceMode by AppSettings.highPerformanceMode.collectAsStateWithLifecycle()
     val performanceRefreshRate by AppSettings.performanceRefreshRate.collectAsStateWithLifecycle()
+    
+    // Bluetooth states
+    val bluetoothAutoConnect by AppSettings.bluetoothAutoConnect.collectAsStateWithLifecycle()
+    val bluetoothCodec by AppSettings.bluetoothCodec.collectAsStateWithLifecycle()
+    val bluetoothAbsoluteVolume by AppSettings.bluetoothAbsoluteVolume.collectAsStateWithLifecycle()
+    val pairedDevices by AppSettings.pairedDevices.collectAsStateWithLifecycle()
+    
     val currentDisplay = LocalView.current.display
     val supportedRefreshRates = remember(currentDisplay) {
         currentDisplay.supportedPerformanceRefreshRates()
@@ -289,6 +317,7 @@ fun SettingsScreen(
     var picking by remember { mutableStateOf<QualityTarget?>(null) }
     var pickingDownloadQuality by remember { mutableStateOf(false) }
     var pickingAutomixPerformance by remember { mutableStateOf(false) }
+    var pickingBluetoothCodec by remember { mutableStateOf(false) }
     // What the last export or import did, shown on the row that did it rather
     // than as a toast: a backup is the one action here whose outcome nobody can
     // check by looking at the app afterwards. Held per direction, or an import's
@@ -317,9 +346,76 @@ fun SettingsScreen(
             )
         }
         AppSettings.setLocalMusicFolderUri(folder.toString())
-    }
+}
+}
 
-    /**
+/** Bluetooth codec picker for HD/lossless audio over Bluetooth. */
+@Composable
+private fun BluetoothCodecSheet(
+    selected: BluetoothCodec,
+    onSelect: (BluetoothCodec) -> Unit,
+) {
+    val haptics = LocalHapticFeedback.current
+    Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+        Row(
+            modifier = Modifier.padding(start = 22.dp, end = 22.dp, bottom = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Bluetooth,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.size(22.dp),
+            )
+            Spacer(Modifier.width(14.dp))
+            Column {
+                Text(
+                    text = stringResource(R.string.bluetooth_quality),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Text(
+                    text = stringResource(R.string.bluetooth_quality_subtitle),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outline)
+        BluetoothCodec.entries.forEach { codec ->
+            val chosen = codec == selected
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        onSelect(codec)
+                    }
+                    .padding(horizontal = 22.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = codec.localizedLabel(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+                if (chosen) {
+                    Spacer(Modifier.width(12.dp))
+                    Icon(
+                        Icons.Rounded.Check,
+                        contentDescription = stringResource(R.string.selected),
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(22.dp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
      * Both halves go through the system document picker rather than a path of
      * this app's own choosing. That is what puts the file somewhere the user can
      * actually find it — Drive, Files, a folder they already back up — and it
@@ -753,6 +849,78 @@ fun SettingsScreen(
                     title = equalizerTitle,
                     subtitle = stringResource(R.string.equalizer_subtitle),
                     onClick = onEqualizer,
+                )
+            }
+        }
+
+        // Bluetooth & Devices
+        SearchableSettingsGroup(search, header = stringResource(R.string.bluetooth_devices)) {
+            val bluetoothTitle = stringResource(R.string.bluetooth_title)
+            row(bluetoothTitle, "bluetooth", "device", "headphones", "speaker", "car") {
+                SettingsRow(
+                    icon = Icons.Rounded.Bluetooth,
+                    title = bluetoothTitle,
+                    subtitle = stringResource(R.string.bluetooth_subtitle),
+                    onClick = onBluetoothSettings,
+                )
+            }
+            val bluetoothAutoConnectTitle = stringResource(R.string.bluetooth_auto_connect)
+            row(bluetoothAutoConnectTitle, "auto", "connect", "headphones", divided = false) {
+                SettingsSubRow(
+                    title = bluetoothAutoConnectTitle,
+                    checked = bluetoothAutoConnect,
+                    onCheckedChange = AppSettings::setBluetoothAutoConnect,
+                )
+            }
+            val bluetoothQualityTitle = stringResource(R.string.bluetooth_quality)
+            row(bluetoothQualityTitle, "codec", "ldac", "aptx", "aac", divided = false) {
+                SettingsRow(
+                    icon = Icons.Rounded.BluetoothConnected,
+                    title = bluetoothQualityTitle,
+                    subtitle = stringResource(R.string.bluetooth_quality_subtitle),
+                    value = bluetoothCodec.localizedLabel(),
+                    onClick = { pickingBluetoothCodec = true },
+                )
+            }
+            val bluetoothAbsVolumeTitle = stringResource(R.string.bluetooth_absolute_volume)
+            row(bluetoothAbsVolumeTitle, "absolute volume", "sync", divided = false) {
+                SettingsSubRow(
+                    title = bluetoothAbsVolumeTitle,
+                    checked = bluetoothAbsoluteVolume,
+                    onCheckedChange = AppSettings::setBluetoothAbsoluteVolume,
+                    subtitle = stringResource(R.string.bluetooth_absolute_volume_subtitle),
+                )
+            }
+            val pairedDevicesTitle = stringResource(R.string.paired_devices)
+            row(pairedDevicesTitle, "paired", "saved", "devices", divided = false) {
+                SettingsRow(
+                    icon = Icons.Rounded.BluetoothConnected,
+                    title = pairedDevicesTitle,
+                    subtitle = pairedDevices.value?.joinToString(", ") { it.name }
+                        ?: stringResource(R.string.no_paired_devices),
+                    onClick = onPairedDevices,
+                )
+            }
+        }
+
+        // AI Playlist Creator
+        SearchableSettingsGroup(search, header = stringResource(R.string.ai_playlists)) {
+            val aiPlaylistTitle = stringResource(R.string.ai_playlist_creator)
+            row(aiPlaylistTitle, "ai", "smart", "playlist", "generate", "mood") {
+                SettingsRow(
+                    icon = Icons.Rounded.AutoAwesome,
+                    title = aiPlaylistTitle,
+                    subtitle = stringResource(R.string.ai_playlist_creator_subtitle),
+                    onClick = onAiPlaylistCreator,
+                )
+            }
+            val aiPlaylistHistoryTitle = stringResource(R.string.ai_playlist_history)
+            row(aiPlaylistHistoryTitle, "history", "generated", divided = false) {
+                SettingsRow(
+                    icon = Icons.Rounded.History,
+                    title = aiPlaylistHistoryTitle,
+                    subtitle = stringResource(R.string.ai_playlist_history_subtitle),
+                    onClick = onAiPlaylistHistory,
                 )
             }
         }
@@ -1653,6 +1821,21 @@ fun SettingsScreen(
         }
     }
 
+    if (pickingBluetoothCodec) {
+        ModalBottomSheet(
+            onDismissRequest = { pickingBluetoothCodec = false },
+            containerColor = MaterialTheme.colorScheme.background,
+        ) {
+            BluetoothCodecSheet(
+                selected = bluetoothCodec,
+                onSelect = { codec ->
+                    AppSettings.setBluetoothCodec(codec)
+                    pickingBluetoothCodec = false
+                },
+            )
+        }
+    }
+
     // Everything in the Cached songs folder goes with it, so say so first.
     if (confirmClearSongCache) {
         AlertDialog(
@@ -1916,6 +2099,21 @@ private fun AutomixPerformanceMode.localizedLabel(): String = stringResource(
         AutomixPerformanceMode.EFFICIENT -> R.string.automix_mode_efficient
         AutomixPerformanceMode.BALANCED -> R.string.automix_mode_balanced
         AutomixPerformanceMode.PERFORMANCE -> R.string.automix_mode_performance
+    },
+)
+
+@Composable
+private fun BluetoothCodec.localizedLabel(): String = stringResource(
+    when (this) {
+        BluetoothCodec.AUTO -> R.string.bluetooth_codec_auto
+        BluetoothCodec.SBC -> R.string.bluetooth_codec_sbc
+        BluetoothCodec.AAC -> R.string.bluetooth_codec_aac
+        BluetoothCodec.APTX -> R.string.bluetooth_codec_aptx
+        BluetoothCodec.APTX_HD -> R.string.bluetooth_codec_aptx_hd
+        BluetoothCodec.APTX_ADAPTIVE -> R.string.bluetooth_codec_aptx_adaptive
+        BluetoothCodec.LDAC -> R.string.bluetooth_codec_ldac
+        BluetoothCodec.LHDC -> R.string.bluetooth_codec_lhdc
+        BluetoothCodec.SAMSUNG_UHQ -> R.string.bluetooth_codec_samsung_uhq
     },
 )
 

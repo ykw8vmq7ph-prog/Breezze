@@ -1196,13 +1196,71 @@
     <string name="wear_os_step_pair">Tap Pair new device, then enter the six-digit code the watch shows.</string>
     <string name="wear_os_searching">Looking for your watch on Wi-Fi…</string>
     <string name="wear_os_found">Found your watch</string>
-    <string name="wear_os_pairing">Pairing…</string>
+<string name="wear_os_pairing">Pairing…</string>
     <string name="wear_os_installing">Installing Breezze on your watch…</string>
     <string name="wear_os_installed">Installed. You can turn Wireless debugging off again.</string>
-    <string name="wear_os_failed">That didn’t work (%1$s). Check the code and try again.</string>
+    <string name="wear_os_failed">That didn't work (%1$s). Check the code and try again.</string>
     <string name="wear_os_unsupported">Installing on a watch needs Android 11 or later on this phone.</string>
     <string name="wear_os_code_hint">Pairing code</string>
     <string name="wear_os_done">Done</string>
     <string name="signed_by">Signed by %1$s</string>
+    
+    <!-- Bluetooth & Devices -->
+    <string name="bluetooth_devices">Bluetooth & Devices</string>
+    <string name="bluetooth_title">Bluetooth</string>
+    <string name="bluetooth_subtitle">Manage connected devices, codecs, and auto-connect</string>
+    <string name="bluetooth_auto_connect">Auto-connect to last device</string>
+    <string name="bluetooth_quality">Bluetooth audio quality</string>
+    <string name="bluetooth_quality_subtitle">Choose codec (LDAC, aptX HD, AAC, SBC)</string>
+    <string name="bluetooth_absolute_volume">Absolute volume (sync phone & device)</string>
+    <string name="bluetooth_absolute_volume_subtitle">Volume controls on device change phone volume and vice versa</string>
+    <string name="paired_devices">Paired devices</string>
+    <string name="no_paired_devices">No paired devices</string>
+    
+    <!-- AI Playlist Creator -->
+    <string name="ai_playlists">AI Playlists</string>
+    <string name="ai_playlist_creator">AI Playlist Creator</string>
+    <string name="ai_playlist_creator_subtitle">Generate playlists from mood, genre, activity, or description</string>
+    <string name="ai_playlist_history">Generated playlists history</string>
+    <string name="ai_playlist_history_subtitle">View and manage your AI-generated playlists</string>
+    
+    <!-- Playlist Cover Art -->
+    <string name="playlist_cover_art">Playlist cover art</string>
+    <string name="change_cover_art">Change cover art</string>
+    <string name="remove_cover_art">Remove cover art</string>
+    <string name="choose_cover_from_gallery">Choose from gallery</string>
+    <string name="choose_cover_from_camera">Take photo</string>
+    <string name="choose_cover_from_album">Use album art</string>
+    <string name="cover_art_updated">Cover art updated</string>
+    <string name="cover_art_removed">Cover art removed</string>
+    
+    <!-- Playlist Sorting -->
+    <string name="sort_playlist">Sort playlist</string>
+    <string name="sort_by_title">Title (A-Z)</string>
+    <string name="sort_by_title_desc">Title (Z-A)</string>
+    <string name="sort_by_artist">Artist (A-Z)</string>
+    <string name="sort_by_artist_desc">Artist (Z-A)</string>
+    <string name="sort_by_album">Album (A-Z)</string>
+    <string name="sort_by_date_added">Date added (newest first)</string>
+    <string name="sort_by_date_added_desc">Date added (oldest first)</string>
+    <string name="sort_by_duration">Duration (shortest first)</string>
+    <string name="sort_by_duration_desc">Duration (longest first)</string>
+    <string name="sort_custom">Custom order (drag to reorder)</string>
+    
+    <!-- UX Improvements -->
+    <string name="bluetooth_codec">Bluetooth codec</string>
+    <string name="bluetooth_codec_sbc">SBC (default)</string>
+    <string name="bluetooth_codec_aac">AAC</string>
+    <string name="bluetooth_codec_aptx">aptX</string>
+    <string name="bluetooth_codec_aptx_hd">aptX HD</string>
+    <string name="bluetooth_codec_aptx_adaptive">aptX Adaptive</string>
+    <string name="bluetooth_codec_ldac">LDAC</string>
+    <string name="bluetooth_codec_lhdc">LHDC</string>
+    <string name="bluetooth_codec_samsung_uhq">Samsung UHQ</string>
+    <string name="bluetooth_codec_auto">Auto (best available)</string>
+    
+    <!-- Settings Search Keywords -->
+    <string name="bluetooth_devices">Bluetooth & Devices</string>
+    <string name="ai_playlists">AI Playlists</string>
 </resources>
 

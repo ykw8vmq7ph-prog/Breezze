@@ -99,6 +99,18 @@ enum class ThemeMode(val label: String) {
     SYSTEM("System"), LIGHT("Light"), DARK("Dark")
 }
 
+enum class BluetoothCodec(val label: String) {
+    AUTO("Auto (best available)"),
+    SBC("SBC (default)"),
+    AAC("AAC"),
+    APTX("aptX"),
+    APTX_HD("aptX HD"),
+    APTX_ADAPTIVE("aptX Adaptive"),
+    LDAC("LDAC"),
+    LHDC("LHDC"),
+    SAMSUNG_UHQ("Samsung UHQ"),
+}
+
 /**
  * Which of the equaliser's two tabs is driving the sound.
  *
@@ -404,6 +416,18 @@ object AppSettings {
 
     /** Real backdrop-sampled glass (blur, lens refraction) on the floating nav bar, Android 12+ only. */
     val liquidGlass = MutableStateFlow(false)
+
+    /** Automatically reconnect to the last paired Bluetooth device on app start. */
+    val bluetoothAutoConnect = MutableStateFlow(false)
+
+    /** Preferred Bluetooth codec for lossless/HD audio. */
+    val bluetoothCodec = MutableStateFlow(BluetoothCodec.AUTO)
+
+    /** Sync volume between phone and Bluetooth device (absolute volume). */
+    val bluetoothAbsoluteVolume = MutableStateFlow(true)
+
+    /** List of paired Bluetooth device names. */
+    val pairedDevices = MutableStateFlow<Set<String>>(emptySet())
 
     /** Blurs unfocused lyric lines, keeping the active line sharp. */
     val lyricsBlur = MutableStateFlow(true)
@@ -870,6 +894,20 @@ object AppSettings {
         smartVersionAlignment.value = prefs.getBoolean(KEY_SMART_VERSION_ALIGNMENT, true)
         reduceDynamicBlur.value = prefs.getBoolean(KEY_REDUCE_BLUR, false)
         liquidGlass.value = prefs.getBoolean(KEY_LIQUID_GLASS, false)
+        
+        // Bluetooth settings
+        bluetoothAutoConnect.value = prefs.getBoolean(KEY_BLUETOOTH_AUTO_CONNECT, false)
+        bluetoothCodec.value = runCatching {
+            BluetoothCodec.valueOf(prefs.getString(KEY_BLUETOOTH_CODEC, BluetoothCodec.AUTO.name))
+        }.getOrDefault(BluetoothCodec.AUTO)
+        bluetoothAbsoluteVolume.value = prefs.getBoolean(KEY_BLUETOOTH_ABSOLUTE_VOLUME, true)
+        val paired = prefs.getString(KEY_PAIRED_DEVICES, null)
+        if (paired != null && paired.isNotBlank()) {
+            pairedDevices.value = paired.split(",").filter { it.isNotBlank() }.toSet()
+        } else {
+            pairedDevices.value = emptySet()
+        }
+        
         lyricsBlur.value = prefs.getBoolean(KEY_LYRICS_BLUR, true)
         lyricsOffsetMs.value = prefs.getInt(KEY_LYRICS_OFFSET_MS, 0)
             .coerceIn(MIN_LYRICS_OFFSET_MS, MAX_LYRICS_OFFSET_MS)
@@ -1284,6 +1322,33 @@ object AppSettings {
     fun setLiquidGlass(value: Boolean) {
         liquidGlass.value = value
         prefs.edit().putBoolean(KEY_LIQUID_GLASS, value).apply()
+    }
+
+    fun setBluetoothAutoConnect(value: Boolean) {
+        bluetoothAutoConnect.value = value
+        prefs.edit().putBoolean(KEY_BLUETOOTH_AUTO_CONNECT, value).apply()
+    }
+
+    fun setBluetoothCodec(value: BluetoothCodec) {
+        bluetoothCodec.value = value
+        prefs.edit().putString(KEY_BLUETOOTH_CODEC, value.name).apply()
+    }
+
+    fun setBluetoothAbsoluteVolume(value: Boolean) {
+        bluetoothAbsoluteVolume.value = value
+        prefs.edit().putBoolean(KEY_BLUETOOTH_ABSOLUTE_VOLUME, value).apply()
+    }
+
+    fun addPairedDevice(name: String) {
+        val updated = pairedDevices.value + name
+        pairedDevices.value = updated
+        prefs.edit().putString(KEY_PAIRED_DEVICES, updated.joinToString(",")).apply()
+    }
+
+    fun removePairedDevice(name: String) {
+        val updated = pairedDevices.value - name
+        pairedDevices.value = updated
+        prefs.edit().putString(KEY_PAIRED_DEVICES, updated.joinToString(",")).apply()
     }
 
     fun setHighPerformanceMode(value: Boolean) {
@@ -2101,6 +2166,12 @@ object AppSettings {
     private const val KEY_DISCORD_BUTTON_2_VISIBLE = "discord_button_2_visible"
     private const val KEY_DISCORD_INFO_DISMISSED = "discord_info_dismissed"
     private const val KEY_LAST_VERSION_CODE = "last_version_code"
+    
+    // Bluetooth settings
+    private const val KEY_BLUETOOTH_AUTO_CONNECT = "bluetooth_auto_connect"
+    private const val KEY_BLUETOOTH_CODEC = "bluetooth_codec"
+    private const val KEY_BLUETOOTH_ABSOLUTE_VOLUME = "bluetooth_absolute_volume"
+    private const val KEY_PAIRED_DEVICES = "paired_devices"
 }
 
 
