@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.graphics
+package com.music.breezze.ui.graphics
 
 import androidx.compose.ui.graphics.ImageBitmap
 import java.util.PriorityQueue
@@ -264,3 +264,4 @@ internal object PaletteQuantizer {
         return newValue and ((1 shl targetWidth) - 1)
     }
 }
+

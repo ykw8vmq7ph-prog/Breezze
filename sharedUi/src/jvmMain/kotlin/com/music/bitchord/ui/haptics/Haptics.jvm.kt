@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.haptics
+package com.music.breezze.ui.haptics
 
 import androidx.compose.runtime.Composable
 
@@ -11,3 +11,4 @@ private val NoHaptics = Haptics()
 
 @Composable
 actual fun rememberHaptics(): Haptics = NoHaptics
+

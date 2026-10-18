@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.theme
+package com.music.breezze.ui.theme
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -22,3 +22,4 @@ class ArtworkPaletteTest {
     }
 
 }
+

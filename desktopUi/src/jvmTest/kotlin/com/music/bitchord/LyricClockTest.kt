@@ -1,6 +1,6 @@
-package com.music.bitchord
+package com.music.breezze
 
-import com.music.bitchord.ui.player.LyricClock
+import com.music.breezze.ui.player.LyricClock
 import kotlin.math.abs
 import kotlin.random.Random
 import org.junit.Assert.assertEquals
@@ -246,3 +246,4 @@ class LyricClockTest {
         assertTrue(abs(last - (15_000 - 1_500)) < 40)
     }
 }
+

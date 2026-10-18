@@ -1,7 +1,7 @@
-package com.music.bitchord
+package com.music.breezze
 
-import com.music.bitchord.data.lyrics.LyricLine
-import com.music.bitchord.ui.player.activeLyricRows
+import com.music.breezze.data.lyrics.LyricLine
+import com.music.breezze.ui.player.activeLyricRows
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -48,3 +48,4 @@ class LyricFocusTest {
         assertEquals(emptyList<Int>(), activeLyricRows(overlap, 500))
     }
 }
+

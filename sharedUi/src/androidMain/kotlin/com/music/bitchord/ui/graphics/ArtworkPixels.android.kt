@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.graphics
+package com.music.breezze.ui.graphics
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.ImageBitmap
@@ -22,3 +22,4 @@ actual fun paletteSwatches(image: ImageBitmap, maxColors: Int, clearFilters: Boo
     if (clearFilters) builder.clearFilters()
     return builder.generate().swatches.map { Swatch(it.rgb, it.population) }
 }
+

@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.player
+package com.music.breezze.ui.player
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -127,3 +127,4 @@ internal actual fun DrawScope.clipShiftedDown(
     canvas.restore()
     paint.close()
 }
+

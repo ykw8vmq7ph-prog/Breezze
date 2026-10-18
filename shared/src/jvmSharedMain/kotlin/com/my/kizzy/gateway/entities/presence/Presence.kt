@@ -14,3 +14,4 @@ data class Presence(
     @SerialName("status")
     val status: String? = "online",
 )
+

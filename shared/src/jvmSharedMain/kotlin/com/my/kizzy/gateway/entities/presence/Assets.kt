@@ -14,3 +14,4 @@ data class Assets(
     @SerialName("small_text")
     val smallText: String? = null,
 )
+

@@ -12,3 +12,4 @@ data class Resume(
     @SerialName("token")
     val token: String,
 )
+

@@ -1,4 +1,4 @@
-package com.music.bitchord.data.presence
+package com.music.breezze.data.presence
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -85,3 +85,4 @@ class PresenceTest {
         assertEquals(false, nextPing(timeoutSec = 0)!!.isOpen())
     }
 }
+

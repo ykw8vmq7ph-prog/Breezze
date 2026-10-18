@@ -20,3 +20,4 @@ data class Heartbeat(
     @SerialName("heartbeat_interval")
     val heartbeatInterval: Long,
 )
+

@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.graphics
+package com.music.breezze.ui.graphics
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
@@ -30,3 +30,4 @@ actual fun imageBitmapOf(pixels: IntArray, width: Int, height: Int): ImageBitmap
 
 actual fun paletteSwatches(image: ImageBitmap, maxColors: Int, clearFilters: Boolean): List<Swatch> =
     PaletteQuantizer.swatches(image, maxColors, clearFilters)
+

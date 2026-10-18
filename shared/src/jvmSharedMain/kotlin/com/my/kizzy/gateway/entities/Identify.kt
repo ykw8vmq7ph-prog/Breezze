@@ -75,3 +75,4 @@ data class Properties(
     @SerialName("os")
     val os: String,
 )
+

@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.player
+package com.music.breezze.ui.player
 
 import android.os.Build
 import android.os.SystemClock
@@ -118,3 +118,4 @@ internal actual fun DrawScope.clipShiftedDown(
         translate(top = dy) { block() }
     }
 }
+

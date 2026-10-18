@@ -8,3 +8,4 @@ data class Metadata(
     @SerialName("button_urls")
     val buttonUrls: List<String?>?,
 )
+

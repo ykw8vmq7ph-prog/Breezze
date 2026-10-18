@@ -40,3 +40,4 @@ enum class OpCode(val value: Int) {
     /** For future use or unknown opcodes. */
     UNKNOWN(-1);
 }
+

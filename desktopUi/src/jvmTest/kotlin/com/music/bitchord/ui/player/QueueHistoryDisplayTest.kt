@@ -1,7 +1,7 @@
-package com.music.bitchord.ui.player
+package com.music.breezze.ui.player
 
-import com.music.bitchord.data.model.QueueTier
-import com.music.bitchord.data.model.Song
+import com.music.breezze.data.model.QueueTier
+import com.music.breezze.data.model.Song
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -62,3 +62,4 @@ class QueueHistoryDisplayTest {
         assertTrue(splitQueue(listOf(song("a")), 0, true).history.isEmpty())
     }
 }
+

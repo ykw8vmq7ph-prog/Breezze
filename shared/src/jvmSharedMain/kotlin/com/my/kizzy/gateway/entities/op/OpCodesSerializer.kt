@@ -28,3 +28,4 @@ class OpCodeSerializer : KSerializer<OpCode> {
         encoder.encodeInt(value.value)
     }
 }
+

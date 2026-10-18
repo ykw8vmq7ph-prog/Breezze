@@ -1,4 +1,4 @@
-package com.music.bitchord.data.settings
+package com.music.breezze.data.settings
 
 import android.content.SharedPreferences
 import org.junit.Assert.assertEquals
@@ -255,3 +255,4 @@ class FakeSharedPreferences : SharedPreferences {
         }
     }
 }
+

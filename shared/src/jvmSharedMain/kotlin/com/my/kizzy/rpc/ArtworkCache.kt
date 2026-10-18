@@ -9,3 +9,4 @@ internal object ArtworkCache {
         return cache[key] ?: fetch()?.also { cache[key] = it }
     }
 }
+

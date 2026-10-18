@@ -22,3 +22,4 @@ data class Ready(
     @SerialName("session_id")
     val sessionId: String? = null,
 )
+

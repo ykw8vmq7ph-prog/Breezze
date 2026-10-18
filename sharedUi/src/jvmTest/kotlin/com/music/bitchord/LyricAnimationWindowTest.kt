@@ -1,8 +1,8 @@
-package com.music.bitchord
+package com.music.breezze
 
-import com.music.bitchord.data.lyrics.LyricLine
-import com.music.bitchord.data.lyrics.LyricSyllable
-import com.music.bitchord.data.lyrics.LyricWord
+import com.music.breezze.data.lyrics.LyricLine
+import com.music.breezze.data.lyrics.LyricSyllable
+import com.music.breezze.data.lyrics.LyricWord
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -81,3 +81,4 @@ class LyricAnimationWindowTest {
         assertEquals(withBacking.timeMs, withBacking.animatesFromMs)
     }
 }
+

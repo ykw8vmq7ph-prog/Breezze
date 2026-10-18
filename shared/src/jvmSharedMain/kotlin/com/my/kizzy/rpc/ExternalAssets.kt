@@ -40,3 +40,4 @@ suspend fun fetchExternalAsset(
         list.firstOrNull()?.externalAssetPath?.let { "mp:$it" }
     }.getOrNull()
 }
+

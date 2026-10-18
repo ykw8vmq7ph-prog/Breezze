@@ -16,3 +16,4 @@ data class Payload(
     @SerialName("d")
     val d: JsonElement? = null,
 )
+

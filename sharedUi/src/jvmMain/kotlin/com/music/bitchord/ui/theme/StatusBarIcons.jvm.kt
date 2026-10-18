@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.theme
+package com.music.breezze.ui.theme
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
@@ -14,3 +14,4 @@ actual fun HideStatusBar(hidden: Boolean) = Unit
 
 @Composable
 actual fun stableStatusBarInsets(): WindowInsets = WindowInsets.statusBars
+

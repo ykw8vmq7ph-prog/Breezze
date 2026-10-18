@@ -1,7 +1,7 @@
-package com.music.bitchord.ui.player
+package com.music.breezze.ui.player
 
-import com.music.bitchord.data.model.QueueTier
-import com.music.bitchord.data.model.Song
+import com.music.breezze.data.model.QueueTier
+import com.music.breezze.data.model.Song
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -37,3 +37,4 @@ class QueueKeyUniquenessTest {
         assertTrue(all.map { it.key }.let { it.size == it.toSet().size })
     }
 }
+

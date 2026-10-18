@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.theme
+package com.music.breezze.ui.theme
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -31,3 +31,4 @@ class StatusBarContrastTest {
         assertEquals(0.405f, topBandScrimAlpha(mixed), 0.0001f)
     }
 }
+

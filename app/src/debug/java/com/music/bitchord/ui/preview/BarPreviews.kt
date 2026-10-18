@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.preview
+package com.music.breezze.ui.preview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -24,16 +24,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.music.bitchord.data.model.Song
-import com.music.bitchord.ui.components.BottomFadeScrim
-import com.music.bitchord.ui.components.BottomTab
-import com.music.bitchord.ui.components.FloatingBottomBar
-import com.music.bitchord.ui.components.FrostedTopBar
-import com.music.bitchord.ui.components.MiniPlayer
-import com.music.bitchord.ui.components.TopFadeBlur
-import com.music.bitchord.ui.components.TopBarBlur
-import com.music.bitchord.ui.icons.BitChordIcons
-import com.music.bitchord.ui.theme.BitChordTheme
+import com.music.breezze.data.model.Song
+import com.music.breezze.ui.components.BottomFadeScrim
+import com.music.breezze.ui.components.BottomTab
+import com.music.breezze.ui.components.FloatingBottomBar
+import com.music.breezze.ui.components.FrostedTopBar
+import com.music.breezze.ui.components.MiniPlayer
+import com.music.breezze.ui.components.TopFadeBlur
+import com.music.breezze.ui.components.TopBarBlur
+import com.music.breezze.ui.icons.BreezzeIcons
+import com.music.breezze.ui.theme.BreezzeTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 
@@ -109,14 +109,14 @@ private val PreviewSong = Song(
 )
 
 private val PreviewTabs = listOf(
-    BottomTab("Play", BitChordIcons.Play),
-    BottomTab("Explore", BitChordIcons.TabExplore),
-    BottomTab("Library", BitChordIcons.TabLibrary),
-    BottomTab("Search", BitChordIcons.TabSearch),
+    BottomTab("Play", BreezzeIcons.Play),
+    BottomTab("Explore", BreezzeIcons.TabExplore),
+    BottomTab("Library", BreezzeIcons.TabLibrary),
+    BottomTab("Search", BreezzeIcons.TabSearch),
 )
 
 /**
- * The whole chrome stack in the order [com.music.bitchord.MainActivity] draws
+ * The whole chrome stack in the order [com.music.Breezze.MainActivity] draws
  * it: feed, bounded top blur, bar, bottom scrim, pill.
  */
 @Composable
@@ -179,20 +179,20 @@ private fun ChromeStack(scrolled: Boolean, withMiniPlayer: Boolean) {
 @Preview(name = "Chrome · dark", device = "id:pixel_8", showBackground = true)
 @Composable
 private fun ChromeDarkPreview() {
-    BitChordTheme(darkTheme = true) { ChromeStack(scrolled = true, withMiniPlayer = false) }
+    BreezzeTheme(darkTheme = true) { ChromeStack(scrolled = true, withMiniPlayer = false) }
 }
 
 @Preview(name = "Chrome · light", device = "id:pixel_8", showBackground = true)
 @Composable
 private fun ChromeLightPreview() {
-    BitChordTheme(darkTheme = false) { ChromeStack(scrolled = true, withMiniPlayer = false) }
+    BreezzeTheme(darkTheme = false) { ChromeStack(scrolled = true, withMiniPlayer = false) }
 }
 
 /** The taller scrim, which the mini player's arrival grows it into. */
 @Preview(name = "Chrome · mini player", device = "id:pixel_8", showBackground = true)
 @Composable
 private fun ChromeMiniPlayerPreview() {
-    BitChordTheme(darkTheme = true) { ChromeStack(scrolled = true, withMiniPlayer = true) }
+    BreezzeTheme(darkTheme = true) { ChromeStack(scrolled = true, withMiniPlayer = true) }
 }
 
 /**
@@ -213,7 +213,7 @@ private fun ChromeMiniPlayerPreview() {
 )
 @Composable
 private fun MiniPlayerPreview() {
-    BitChordTheme {
+    BreezzeTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -265,7 +265,7 @@ private fun MiniPlayerPreview() {
 )
 @Composable
 private fun ScrimRampPreview() {
-    BitChordTheme {
+    BreezzeTheme {
         Box(Modifier.fillMaxSize()) {
             // A mid grey under it: the ramp reads as a ramp against this,
             // whereas over the theme's own background it is invisible by
@@ -290,7 +290,7 @@ private fun ScrimRampPreview() {
 @Preview(name = "Top bar · backdrops", device = "id:pixel_8", showBackground = true)
 @Composable
 private fun TopBarBackdropPreview() {
-    BitChordTheme(darkTheme = true) {
+    BreezzeTheme(darkTheme = true) {
         Column(
             Modifier
                 .fillMaxSize()
@@ -308,3 +308,5 @@ private fun TopBarBackdropPreview() {
         }
     }
 }
+
+

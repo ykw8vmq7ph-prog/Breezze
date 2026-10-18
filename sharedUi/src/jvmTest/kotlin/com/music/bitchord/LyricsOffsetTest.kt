@@ -1,7 +1,7 @@
-package com.music.bitchord
+package com.music.breezze
 
-import com.music.bitchord.ui.player.adjustedLyricsPosition
-import com.music.bitchord.ui.player.adjustedLyricsSeekTarget
+import com.music.breezze.ui.player.adjustedLyricsPosition
+import com.music.breezze.ui.player.adjustedLyricsSeekTarget
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -27,3 +27,4 @@ class LyricsOffsetTest {
         assertEquals(8_500L, adjustedLyricsSeekTarget(lineTimeMs = 10_000L, offsetMs = -1_500))
     }
 }
+

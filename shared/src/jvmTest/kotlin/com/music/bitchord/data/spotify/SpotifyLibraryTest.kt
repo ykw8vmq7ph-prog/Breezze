@@ -1,4 +1,4 @@
-package com.music.bitchord.data.spotify
+package com.music.breezze.data.spotify
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -66,3 +66,4 @@ class SpotifyLibraryTest {
         assertNull(SpotifyImporter.extractPlaylistId(""))
     }
 }
+

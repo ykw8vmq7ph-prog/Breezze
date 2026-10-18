@@ -1,4 +1,4 @@
-package com.music.bitchord.ui.theme
+package com.music.breezze.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -94,3 +94,4 @@ fun findWindow(view: android.view.View): android.view.Window? {
     }
     return null
 }
+

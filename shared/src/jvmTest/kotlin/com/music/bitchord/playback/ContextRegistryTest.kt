@@ -1,6 +1,6 @@
-package com.music.bitchord.playback
+package com.music.breezze.playback
 
-import com.music.bitchord.data.model.Song
+import com.music.breezze.data.model.Song
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -328,3 +328,4 @@ class ContextRegistryTest {
         thumbnailUrl = null,
     )
 }
+

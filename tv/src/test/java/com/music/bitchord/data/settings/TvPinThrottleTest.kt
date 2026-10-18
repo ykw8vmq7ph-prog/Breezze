@@ -1,4 +1,4 @@
-package com.music.bitchord.data.settings
+package com.music.breezze.data.settings
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -140,3 +140,4 @@ class TvPinThrottleTest {
         assertEquals(10_000L, TvPinThrottle.getDelayRemainingMs(key, now = 3_000L))
     }
 }
+

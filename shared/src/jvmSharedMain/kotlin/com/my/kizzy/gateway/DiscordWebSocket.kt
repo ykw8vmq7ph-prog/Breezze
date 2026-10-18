@@ -606,3 +606,4 @@ private val androidElapsedRealtime: java.lang.reflect.Method? = runCatching {
 internal fun elapsedRealtimeMs(): Long =
     androidElapsedRealtime?.let { runCatching { it.invoke(null) as Long }.getOrNull() }
         ?: (System.nanoTime() / 1_000_000L)
+
