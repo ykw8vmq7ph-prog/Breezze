@@ -210,8 +210,6 @@ fun SettingsScreen(
     onEditSignatureApi: () -> Unit,
     onBluetoothSettings: () -> Unit,
     onPairedDevices: () -> Unit,
-    onAiPlaylistCreator: () -> Unit,
-    onAiPlaylistHistory: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -899,28 +897,6 @@ private fun BluetoothCodecSheet(
                     subtitle = pairedDevices.value?.joinToString(", ") { it.name }
                         ?: stringResource(R.string.no_paired_devices),
                     onClick = onPairedDevices,
-                )
-            }
-        }
-
-        // AI Playlist Creator
-        SearchableSettingsGroup(search, header = stringResource(R.string.ai_playlists)) {
-            val aiPlaylistTitle = stringResource(R.string.ai_playlist_creator)
-            row(aiPlaylistTitle, "ai", "smart", "playlist", "generate", "mood") {
-                SettingsRow(
-                    icon = Icons.Rounded.AutoAwesome,
-                    title = aiPlaylistTitle,
-                    subtitle = stringResource(R.string.ai_playlist_creator_subtitle),
-                    onClick = onAiPlaylistCreator,
-                )
-            }
-            val aiPlaylistHistoryTitle = stringResource(R.string.ai_playlist_history)
-            row(aiPlaylistHistoryTitle, "history", "generated", divided = false) {
-                SettingsRow(
-                    icon = Icons.Rounded.History,
-                    title = aiPlaylistHistoryTitle,
-                    subtitle = stringResource(R.string.ai_playlist_history_subtitle),
-                    onClick = onAiPlaylistHistory,
                 )
             }
         }

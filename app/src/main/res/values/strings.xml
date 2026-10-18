@@ -1217,13 +1217,6 @@
     <string name="paired_devices">Paired devices</string>
     <string name="no_paired_devices">No paired devices</string>
     
-    <!-- AI Playlist Creator -->
-    <string name="ai_playlists">AI Playlists</string>
-    <string name="ai_playlist_creator">AI Playlist Creator</string>
-    <string name="ai_playlist_creator_subtitle">Generate playlists from mood, genre, activity, or description</string>
-    <string name="ai_playlist_history">Generated playlists history</string>
-    <string name="ai_playlist_history_subtitle">View and manage your AI-generated playlists</string>
-    
     <!-- Playlist Cover Art -->
     <string name="playlist_cover_art">Playlist cover art</string>
     <string name="change_cover_art">Change cover art</string>
@@ -1261,6 +1254,5 @@
     
     <!-- Settings Search Keywords -->
     <string name="bluetooth_devices">Bluetooth & Devices</string>
-    <string name="ai_playlists">AI Playlists</string>
 </resources>
 
