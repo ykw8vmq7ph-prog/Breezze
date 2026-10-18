@@ -111,6 +111,19 @@ enum class BluetoothCodec(val label: String) {
     SAMSUNG_UHQ("Samsung UHQ"),
 }
 
+enum class PlaylistSort(val label: String) {
+    TITLE_ASC("Title (A-Z)"),
+    TITLE_DESC("Title (Z-A)"),
+    ARTIST_ASC("Artist (A-Z)"),
+    ARTIST_DESC("Artist (Z-A)"),
+    ALBUM_ASC("Album (A-Z)"),
+    DATE_ADDED_DESC("Date added (newest first)"),
+    DATE_ADDED_ASC("Date added (oldest first)"),
+    DURATION_ASC("Duration (shortest first)"),
+    DURATION_DESC("Duration (longest first)"),
+    CUSTOM("Custom order (drag to reorder)"),
+}
+
 /**
  * Which of the equaliser's two tabs is driving the sound.
  *
@@ -428,6 +441,9 @@ object AppSettings {
 
     /** List of paired Bluetooth device names. */
     val pairedDevices = MutableStateFlow<Set<String>>(emptySet())
+
+    /** Default sort order for playlists. */
+    val playlistSort = MutableStateFlow(PlaylistSort.TITLE_ASC)
 
     /** Blurs unfocused lyric lines, keeping the active line sharp. */
     val lyricsBlur = MutableStateFlow(true)
@@ -908,6 +924,11 @@ object AppSettings {
             pairedDevices.value = emptySet()
         }
         
+        // Playlist sorting
+        playlistSort.value = runCatching {
+            PlaylistSort.valueOf(prefs.getString(KEY_PLAYLIST_SORT, PlaylistSort.TITLE_ASC.name))
+        }.getOrDefault(PlaylistSort.TITLE_ASC)
+        
         lyricsBlur.value = prefs.getBoolean(KEY_LYRICS_BLUR, true)
         lyricsOffsetMs.value = prefs.getInt(KEY_LYRICS_OFFSET_MS, 0)
             .coerceIn(MIN_LYRICS_OFFSET_MS, MAX_LYRICS_OFFSET_MS)
@@ -1349,6 +1370,11 @@ object AppSettings {
         val updated = pairedDevices.value - name
         pairedDevices.value = updated
         prefs.edit().putString(KEY_PAIRED_DEVICES, updated.joinToString(",")).apply()
+    }
+
+    fun setPlaylistSort(value: PlaylistSort) {
+        playlistSort.value = value
+        prefs.edit().putString(KEY_PLAYLIST_SORT, value.name).apply()
     }
 
     fun setHighPerformanceMode(value: Boolean) {
@@ -2172,6 +2198,9 @@ object AppSettings {
     private const val KEY_BLUETOOTH_CODEC = "bluetooth_codec"
     private const val KEY_BLUETOOTH_ABSOLUTE_VOLUME = "bluetooth_absolute_volume"
     private const val KEY_PAIRED_DEVICES = "paired_devices"
+    
+    // Playlist sorting
+    private const val KEY_PLAYLIST_SORT = "playlist_sort"
 }
 
 
