@@ -86,12 +86,11 @@ kotlin {
             implementation("com.squareup.okhttp3:mockwebserver:5.3.2")
         }
         
-        // iOS-specific source sets - only configure on macOS
+        // iOS-specific source sets - only configure on macOS where targets exist
         if (isMacOS) {
-            val iosTargets = listOf(
-                kotlin.targets.getByName<KotlinNativeTarget>("iosSimulatorArm64"),
-                kotlin.targets.getByName<KotlinNativeTarget>("iosArm64")
-            )
+            val iosTargets = listOf("iosSimulatorArm64", "iosArm64").mapNotNull { name ->
+                kotlin.targets.findByName(name) as? org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+            }
             iosTargets.forEach { target ->
                 val iosMain = target.compilations["main"].defaultSourceSet
                 val iosTest = target.compilations["test"].defaultSourceSet
