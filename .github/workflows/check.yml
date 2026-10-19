@@ -21,6 +21,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake g++ ninja-build
 
+      - name: Verify build tools
+        run: |
+          cmake --version
+          g++ --version
+          ninja --version
+
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -67,6 +73,12 @@ jobs:
         run: choco install cmake ninja --no-progress
         shell: pwsh
 
+      - name: Verify build tools
+        run: |
+          cmake --version
+          ninja --version
+        shell: pwsh
+
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -88,7 +100,7 @@ jobs:
         run: echo "Skipping tests for check build"
 
       - name: Build the distributable
-        run: .\gradlew.bat :desktopApp:createDistributable
+        run: .\gradlew.bat :desktopApp:createDistributable --info --stacktrace
 
       - name: The analyser is in the jar
         shell: bash
@@ -117,6 +129,11 @@ jobs:
       - name: Install build tools
         run: brew install cmake ninja
 
+      - name: Verify build tools
+        run: |
+          cmake --version
+          ninja --version
+
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -136,7 +153,7 @@ jobs:
         run: echo "Skipping tests for check build"
 
       - name: Build the distributable
-        run: ./gradlew :desktopApp:createDistributable
+        run: ./gradlew :desktopApp:createDistributable --info --stacktrace
 
       - name: The analyser and models are in the jar
         run: |
