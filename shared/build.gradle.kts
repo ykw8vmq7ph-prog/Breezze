@@ -86,20 +86,22 @@ kotlin {
             implementation("com.squareup.okhttp3:mockwebserver:5.3.2")
         }
         
-        // iOS-specific source sets
-        val iosTargets = listOf(
-            kotlin.targets.getByName<KotlinNativeTarget>("iosSimulatorArm64"),
-            kotlin.targets.getByName<KotlinNativeTarget>("iosArm64")
-        )
-        iosTargets.forEach { target ->
-            val iosMain = target.compilations["main"].defaultSourceSet
-            val iosTest = target.compilations["test"].defaultSourceSet
-            iosMain.dependsOn(commonMain)
-            iosMain.dependencies {
-                // iOS-specific dependencies (Foundation, etc.)
-            }
-            iosTest.dependencies {
-                implementation(kotlin("test"))
+        // iOS-specific source sets - only configure on macOS
+        if (isMacOS) {
+            val iosTargets = listOf(
+                kotlin.targets.getByName<KotlinNativeTarget>("iosSimulatorArm64"),
+                kotlin.targets.getByName<KotlinNativeTarget>("iosArm64")
+            )
+            iosTargets.forEach { target ->
+                val iosMain = target.compilations["main"].defaultSourceSet
+                val iosTest = target.compilations["test"].defaultSourceSet
+                iosMain.dependsOn(commonMain)
+                iosMain.dependencies {
+                    // iOS-specific dependencies (Foundation, etc.)
+                }
+                iosTest.dependencies {
+                    implementation(kotlin("test"))
+                }
             }
         }
     }

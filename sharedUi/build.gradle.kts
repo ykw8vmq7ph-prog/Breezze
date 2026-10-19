@@ -127,26 +127,27 @@ kotlin {
             implementation("androidx.palette:palette-ktx:1.0.0")
         }
         
-        // iOS-specific source sets for shared UI
-        val iosTargets = listOf(
-            kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosSimulatorArm64"),
-            kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosArm64")
-        )
-        iosTargets.forEach { target ->
-            val iosMain = target.compilations["main"].defaultSourceSet
-            val iosTest = target.compilations["test"].defaultSourceSet
-            iosMain.dependsOn(commonMain)
-            iosMain.dependencies {
-                // Compose iOS dependencies
-                api("org.jetbrains.compose.runtime:runtime:$cmp")
-                api("org.jetbrains.compose.foundation:foundation:$cmp")
-                api("org.jetbrains.compose.animation:animation:$cmp")
-                api("org.jetbrains.compose.ui:ui:$cmp")
-                api("org.jetbrains.compose.material3:material3:1.7.3")
-                api("org.jetbrains.compose.material:material-icons-extended:1.7.3")
-                api("org.jetbrains.compose.components:components-resources:$cmp")
-                api("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
-                api("io.coil-kt.coil3:coil-compose:3.0.4")
+        // iOS-specific source sets for shared UI - only on macOS
+        if (isMacOS) {
+            val iosTargets = listOf(
+                kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosSimulatorArm64"),
+                kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosArm64")
+            )
+            iosTargets.forEach { target ->
+                val iosMain = target.compilations["main"].defaultSourceSet
+                val iosTest = target.compilations["test"].defaultSourceSet
+                iosMain.dependsOn(commonMain)
+                iosMain.dependencies {
+                    // Compose iOS dependencies
+                    api("org.jetbrains.compose.runtime:runtime:$cmp")
+                    api("org.jetbrains.compose.foundation:foundation:$cmp")
+                    api("org.jetbrains.compose.animation:animation:$cmp")
+                    api("org.jetbrains.compose.ui:ui:$cmp")
+                    api("org.jetbrains.compose.material3:material3:1.7.3")
+                    api("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+                    api("org.jetbrains.compose.components:components-resources:$cmp")
+                    api("org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
+                    api("io.coil-kt.coil3:coil-compose:3.0.4")
             }
             iosTest.dependencies {
                 implementation(kotlin("test"))
@@ -154,6 +155,7 @@ kotlin {
         }
     }
 }
+    }
 
 android {
     namespace = "com.music.breezze.sharedui"

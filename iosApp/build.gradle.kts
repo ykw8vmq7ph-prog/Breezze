@@ -7,24 +7,31 @@ plugins {
 }
 
 kotlin {
-    // iOS targets
-    listOf("iosSimulatorArm64", "iosArm64").forEach { targetName ->
-        val target = iosTarget(targetName) {
-            binaries.framework {
-                baseName = "iosApp"
-                isStatic = false
+    // For local development/testing on macOS
+    val isMacOS = System.getProperty("os.name").contains("Mac", ignoreCase = true)
+    val xcodeDir = System.getenv("XCODE_DEVELOPER_DIR") ?: "/Applications/Xcode.app/Contents/Developer"
+    val hasXcode = file(System.getenv("XCODE_DEVELOPER_DIR") ?: "/Applications/Xcode.app/Contents/Developer").isDirectory
+    val canBuildIOS = isMacOS && hasXcode
+    
+    // iOS targets - only on macOS with Xcode
+    if (canBuildIOS) {
+        listOf("iosSimulatorArm64", "iosArm64").forEach { targetName ->
+            val target = iosTarget(targetName) {
+                binaries.framework {
+                    baseName = "iosApp"
+                    isStatic = false
+                }
             }
-        }
-        // Configure iOS deployment target
-        target.compilations.all {
-            compilerOptions {
-                freeCompilerArgs.add("-Xios-version-min=15.0")
+            // Configure iOS deployment target
+            target.compilations.all {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xios-version-min=15.0")
+                }
             }
         }
     }
-
+    
     // For local development/testing on macOS
-    val isMacOS = System.getProperty("os.name").contains("Mac", ignoreCase = true)
     if (isMacOS) {
         macosArm64("macos")
     }
@@ -55,26 +62,30 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
         }
         
-        // iOS-specific dependencies
-        val iosTargets = listOf(
-            kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosSimulatorArm64"),
-            kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosArm64")
-        )
-        iosTargets.forEach { target ->
-            val iosMain = target.compilations["main"].defaultSourceSet
-            iosMain.dependsOn(commonMain)
-            
-            // iOS-specific dependencies (Foundation, UIKit, etc.)
-            iosMain.dependencies {
-                // Platform-specific dependencies if needed
+        // iOS-specific dependencies - only on macOS with Xcode
+        if (canBuildIOS) {
+            val iosTargets = listOf(
+                kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosSimulatorArm64"),
+                kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosArm64")
+            )
+            iosTargets.forEach { target ->
+                val iosMain = target.compilations["main"].defaultSourceSet
+                iosMain.dependsOn(commonMain)
+                
+                // iOS-specific dependencies (Foundation, UIKit, etc.)
+                iosMain.dependencies {
+                    // Platform-specific dependencies if needed
+                }
             }
         }
         
-        // macOS target (for local testing)
-        val macosMain = kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("macos", "").compilations["main"].defaultSourceSet
-        macosMain.dependsOn(commonMain)
-        macosMain.dependencies {
-            // macOS-specific dependencies if needed
+        // macOS target (for local testing) - only on macOS
+        if (isMacOS) {
+            val macosMain = kotlin.targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("macos", "").compilations["main"].defaultSourceSet
+            macosMain.dependsOn(commonMain)
+            macosMain.dependencies {
+                // macOS-specific dependencies if needed
+            }
         }
     }
 }
