@@ -15,11 +15,12 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BitChord"
+rootProject.name = "Breezze"
 include(":shared")
 include(":sharedUi")
 include(":desktopUi")
 include(":desktopApp")
+include(":iosApp")
 
 // The Android module only when there is an SDK to build it against. A machine
 // set up for the desktop alone has none, and including it there fails at
@@ -41,4 +42,13 @@ if (androidSdk != null && file(androidSdk).isDirectory) {
     include(":wearos")
 } else {
     logger.lifecycle("No Android SDK found — building the desktop targets only.")
+}
+
+// iOS module - only on macOS with Xcode
+val xcodeDir = System.getenv("XCODE_DEVELOPER_DIR") ?: "/Applications/Xcode.app/Contents/Developer"
+val isMacOS = System.getProperty("os.name").contains("Mac", ignoreCase = true) && file(xcodeDir).isDirectory
+if (isMacOS) {
+    include(":iosApp")
+} else {
+    logger.lifecycle("Not on macOS or Xcode not found — skipping iOS targets.")
 }

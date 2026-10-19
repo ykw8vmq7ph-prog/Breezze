@@ -17,7 +17,7 @@ val targetOs: String = (providers.gradleProperty("breezze.target").orNull ?: whe
     hostIsWindows -> "windows"
     hostIsLinux -> "linux"
     hostIsMac -> "macos"
-    else -> error("BitChord desktop supports Linux, Windows, and macOS only")
+    else -> error("Breezze desktop supports Linux, Windows, and macOS only")
 }).lowercase()
 
 val hostArch = System.getProperty("os.arch").lowercase()
@@ -36,7 +36,7 @@ val nativeClassifier = when (targetOs) {
     "windows" -> "windows-x86_64"
     "linux" -> "linux-x86_64"
     "macos" -> if (isArm64) "macosx-arm64" else "macosx-x86_64"
-    else -> error("BitChord desktop supports Linux, Windows, and macOS only")
+    else -> error("Breezze desktop supports Linux, Windows, and macOS only")
 }
 private fun localProperty(name: String): String = rootProject.file("local.properties")
     .takeIf { it.isFile }
@@ -467,7 +467,7 @@ val windowsPortableAssemble by tasks.registering {
         }
         check(problems.isEmpty()) { "windowsPortable: " + problems.joinToString("; ") }
 
-        val analyser = File(analysisNativeDir.get().asFile, "bitchord_analysis.dll").isFile
+        val analyser = File(analysisNativeDir.get().asFile, "breezze_analysis.dll").isFile
         logger.lifecycle(
             if (analyser) {
                 "windowsPortable: verified — Compose runtime, Windows renderer, Windows FFmpeg, Automix analyser."

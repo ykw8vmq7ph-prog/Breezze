@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -10,6 +11,28 @@ kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
+    // iOS targets - only configured when on macOS with Xcode
+    val xcodeDir = System.getenv("XCODE_DEVELOPER_DIR") ?: "/Applications/Xcode.app/Contents/Developer"
+    val isMacOS = System.getProperty("os.name").contains("Mac", ignoreCase = true) && file(xcodeDir).isDirectory
+    
+    if (isMacOS) {
+        listOf("iosSimulatorArm64", "iosArm64").forEach { targetName ->
+            val target = iosTarget(targetName) {
+                val xcodeBaseDir = file(xcodeDir)
+                binaries.framework {
+                    baseName = "shared"
+                    isStatic = true
+                }
+            }
+            // Configure iOS deployment target
+            target.compilations.all {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xios-version-min=15.0")
+                }
+            }
         }
     }
 
@@ -36,6 +59,8 @@ kotlin {
                 api("io.ktor:ktor-client-okhttp:3.5.2")
                 api("io.ktor:ktor-client-websockets:3.5.2")
                 api("io.ktor:ktor-client-content-negotiation:3.5.2")
+                api("io.ktor:ktor-client-websockets:3.5.2")
+                api("io.ktor:ktor-client-content-negotiation:3.5.2")
                 api("io.ktor:ktor-serialization-kotlinx-json:3.5.2")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -60,10 +85,27 @@ kotlin {
         jvmTest.dependencies {
             implementation("com.squareup.okhttp3:mockwebserver:5.3.2")
         }
+        
+        // iOS-specific source sets
+        val iosTargets = listOf(
+            kotlin.targets.getByName<KotlinNativeTarget>("iosSimulatorArm64"),
+            kotlin.targets.getByName<KotlinNativeTarget>("iosArm64")
+        )
+        iosTargets.forEach { target ->
+            val iosMain = target.compilations["main"].defaultSourceSet
+            val iosTest = target.compilations["test"].defaultSourceSet
+            iosMain.dependsOn(commonMain)
+            iosMain.dependencies {
+                // iOS-specific dependencies (Foundation, etc.)
+            }
+            iosTest.dependencies {
+                implementation(kotlin("test"))
+            }
+        }
     }
 }
 
 android {
-    namespace = "com.music.bitchord.shared"
+    namespace = "com.music.breezze.shared"
     compileSdk = 36
 }
