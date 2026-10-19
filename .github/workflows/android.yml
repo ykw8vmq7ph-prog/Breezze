@@ -20,29 +20,21 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Setup Secrets (Keystore & local.properties)
+    - name: Setup local.properties
       run: |
         echo "LASTFM_API_KEY=" > local.properties
         echo "LASTFM_SECRET=" >> local.properties
 
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > breezze-release.jks
-        {
-          echo "storeFile=breezze-release.jks"
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}"
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}"
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
-        } > keystore.properties
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Signed Prod Release APK
+    - name: Build Prod Release APK (unsigned if no keystore)
       run: ./gradlew assembleProdRelease
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: breezze-prod-release-signed
+        name: breezze-prod-release
         path: app/build/outputs/apk/prod/release/*.apk
 
     # Built by the same assembleProdRelease, with the same key. The watch app
@@ -51,5 +43,5 @@ jobs:
     - name: Upload Wear OS APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: breezze-wear-prod-release-signed
+        name: breezze-wear-prod
         path: wearos/build/outputs/apk/prod/release/*.apk
