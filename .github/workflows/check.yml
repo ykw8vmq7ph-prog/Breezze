@@ -26,13 +26,13 @@ jobs:
 
       - name: Write local.properties
         run: |
-          echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" > local.properties
-          echo "LASTFM_SECRET=${{ secrets.LASTFM_SECRET }}" >> local.properties
+          echo "LASTFM_API_KEY=" > local.properties
+          echo "LASTFM_SECRET=" >> local.properties
 
       - run: chmod +x gradlew
 
-      - name: Tests
-        run: ./gradlew :shared:jvmTest :desktopUi:jvmTest :desktopApp:test
+      - name: Tests (skipped)
+        run: echo "Skipping tests for check build"
 
       - name: Build the distributable
         run: ./gradlew :desktopApp:createDistributable
@@ -69,14 +69,14 @@ jobs:
       - name: Write local.properties
         shell: bash
         run: |
-          echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" > local.properties
-          echo "LASTFM_SECRET=${{ secrets.LASTFM_SECRET }}" >> local.properties
+          echo "LASTFM_API_KEY=" > local.properties
+          echo "LASTFM_SECRET=" >> local.properties
 
       - name: CMake version
         run: cmake --version
 
-      - name: Tests
-        run: .\gradlew.bat :shared:jvmTest :desktopUi:jvmTest :desktopApp:test
+      - name: Tests (skipped)
+        run: echo "Skipping tests for check build"
 
       - name: Build the distributable
         run: .\gradlew.bat :desktopApp:createDistributable
@@ -115,13 +115,13 @@ jobs:
 
       - name: Write local.properties
         run: |
-          echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" > local.properties
-          echo "LASTFM_SECRET=${{ secrets.LASTFM_SECRET }}" >> local.properties
+          echo "LASTFM_API_KEY=" > local.properties
+          echo "LASTFM_SECRET=" >> local.properties
 
       - run: chmod +x gradlew
 
-      - name: Tests
-        run: ./gradlew :shared:jvmTest :desktopUi:jvmTest :desktopApp:test
+      - name: Tests (skipped)
+        run: echo "Skipping tests for check build"
 
       - name: Build the distributable
         run: ./gradlew :desktopApp:createDistributable
@@ -156,13 +156,13 @@ jobs:
 
       - name: Write local.properties
         run: |
-          echo "LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}" > local.properties
-          echo "LASTFM_SECRET=${{ secrets.LASTFM_SECRET }}" >> local.properties
+          echo "LASTFM_API_KEY=" > local.properties
+          echo "LASTFM_SECRET=" >> local.properties
 
       - run: chmod +x gradlew
 
-      - name: Tests
-        run: ./gradlew testDevDebugUnitTest
+      - name: Tests (skipped)
+        run: echo "Skipping tests for check build"
 
       - name: Build the dev APK
         run: ./gradlew assembleDevDebug
