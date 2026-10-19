@@ -519,12 +519,12 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(
-                TargetFormat.Dmg,
-                TargetFormat.Pkg,
-                TargetFormat.Exe,
-                TargetFormat.Msi,
-                TargetFormat.Deb,
-                TargetFormat.Rpm,
+                when (targetOs) {
+                    "windows" -> listOf(TargetFormat.Exe, TargetFormat.Msi)
+                    "macos" -> listOf(TargetFormat.Dmg, TargetFormat.Pkg)
+                    "linux" -> listOf(TargetFormat.Deb, TargetFormat.Rpm)
+                    else -> listOf()
+                }
             )
             packageName = "Breezze"
             packageVersion = nativePackageVersion
