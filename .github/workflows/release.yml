@@ -43,10 +43,10 @@ jobs:
           echo "LASTFM_API_KEY=" > local.properties
           echo "LASTFM_SECRET=" >> local.properties
 
-      - name: Packaging tools
+      - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm fakeroot binutils file
+          sudo apt-get install -y rpm fakeroot binutils file cmake g++ ninja-build
           curl -sSL -o appimagetool.AppImage \
             https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x appimagetool.AppImage
@@ -100,6 +100,11 @@ jobs:
           distribution: 'temurin'
 
       - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install build tools
+        run: |
+          choco install cmake ninja --no-progress
+        shell: pwsh
 
       - name: WiX Toolset 3
         shell: pwsh
@@ -171,6 +176,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: brew install cmake ninja
 
       - name: Set up JDK 21
         uses: actions/setup-java@v5
