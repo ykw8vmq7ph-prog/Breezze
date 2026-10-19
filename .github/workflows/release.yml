@@ -59,7 +59,7 @@ jobs:
       - name: Build deb, rpm and the app image
         run: |
           ./gradlew :desktopApp:packageDeb :desktopApp:packageRpm :desktopApp:createDistributable \
-            -Pbreezze.version=${{ steps.version.outputs.value }}
+            -Pbreezze.version=${{ steps.version.outputs.value }} --info --stacktrace
 
       - name: The analyser and models are in the jar
         run: |
@@ -132,7 +132,7 @@ jobs:
 
       - name: Build msi, exe and the app image
         run: |
-          .\gradlew.bat :desktopApp:packageMsi :desktopApp:packageExe :desktopApp:createDistributable "-Pbreezze.version=${{ steps.version.outputs.value }}"
+          .\gradlew.bat :desktopApp:packageMsi :desktopApp:packageExe :desktopApp:createDistributable "-Pbreezze.version=${{ steps.version.outputs.value }}" --info --stacktrace
 
       - name: The analyser and models are in the jar
         shell: bash
@@ -201,7 +201,7 @@ jobs:
       - name: Build DMG, PKG and the app bundle
         run: |
           ./gradlew :desktopApp:packageDmg :desktopApp:packagePkg :desktopApp:createDistributable \
-            -Pbreezze.version=${{ steps.version.outputs.value }}
+            -Pbreezze.version=${{ steps.version.outputs.value }} --info --stacktrace
 
       - name: The analyser and models are in the jar
         run: |
